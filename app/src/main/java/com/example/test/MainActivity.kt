@@ -10,49 +10,49 @@ import com.google.android.gms.nearby.messages.MessageListener
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var mMessageListener: MessageListener? = null
-    private var mMessage: Message? = null
+    private var messageListener: MessageListener? = null
+    private var message: Message? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mMessageListener = object : MessageListener() {
+        messageListener = object : MessageListener() {
             override fun onFound(message: Message) {
-                Log.d("berichtfound", "Found message: " + String(message.content))
-                val messageWasReceived = String(message.content).trim()
-                receiveText.text = String(message.content)
-                Toast.makeText(this@MainActivity, "Message received! $messageWasReceived", Toast.LENGTH_LONG).show()
+                var receivedMessage = String(message.content).trim()
+                receiveText.text = receivedMessage
+                Toast.makeText(this@MainActivity, "received: $receivedMessage", Toast.LENGTH_LONG).show()
+                Log.d("messagefound", "Found message: " + String(message.content))
             }
 
             override fun onLost(message: Message) {
-                Log.d("berichtlost", "Lost sight of message: " + String(message.content))
-                receiveText.text = message.content.toString()
+                Log.d("messagelost", "Lost sight of message: " + String(message.content))
             }
         }
-        mMessage = Message("Hello World".toByteArray())
+
+        //mMessage = Message("Hello World".toByteArray())
+        //hier kan een eerste bericht komen als er succesvolle verbinding is met een andere telefoon
 
         sendButton.setOnClickListener{
-            //val textFromInput = Message(messageInput.toString().toByteArray())
-            mMessage = Message("Deze app werkt eindelijk".toByteArray())
-            Nearby.getMessagesClient(this).publish(mMessage!!)
-            Toast.makeText(this@MainActivity, mMessage.toString(), Toast.LENGTH_SHORT).show()
-            Log.d("messagelog", "message: ${mMessage.toString()}")
+            message = Message(messageInput.text.toString().toByteArray())
+            Nearby.getMessagesClient(this).publish(message!!)
+            Toast.makeText(this@MainActivity, messageInput.text, Toast.LENGTH_SHORT).show()
+            Log.d("messagesend", "send message: " + messageInput.text)
         }
 
     }
 
     public override fun onStart() {
         super.onStart()
-        Toast.makeText(this@MainActivity, "onStart", Toast.LENGTH_SHORT).show()
-        Nearby.getMessagesClient(this).publish(mMessage!!)
-        Nearby.getMessagesClient(this).subscribe(mMessageListener!!)
+        //Toast.makeText(this@MainActivity, "onstart", Toast.LENGTH_SHORT).show()
+        //Nearby.getMessagesClient(this).publish(mMessage!!)
+        Nearby.getMessagesClient(this).subscribe(messageListener!!)
     }
 
     public override fun onStop() {
-        Toast.makeText(this@MainActivity, "onStop", Toast.LENGTH_SHORT).show()
-        Nearby.getMessagesClient(this).unpublish(mMessage!!)
-        Nearby.getMessagesClient(this).unsubscribe(mMessageListener!!)
+        //Toast.makeText(this@MainActivity, "onstop", Toast.LENGTH_SHORT).show()
+        Nearby.getMessagesClient(this).unpublish(message!!)
+        Nearby.getMessagesClient(this).unsubscribe(messageListener!!)
         super.onStop()
     }
 }
