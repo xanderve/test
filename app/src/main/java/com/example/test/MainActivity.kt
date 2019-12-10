@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         //mMessage = Message("Hello World".toByteArray())
-        //hier kan een eerste bericht komen als er succesvolle verbinding is met een andere telefoon
+        //w przypadku udanego połączenia z innym telefonem można wysłać tutaj wstępną wiadomość
 
         sendButton.setOnClickListener{
             message = Message(messageInput.text.toString().toByteArray())
