@@ -3,6 +3,10 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion. VERSION_1_8
+        targetCompatibility JavaVersion. VERSION_1_8
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
@@ -31,6 +35,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation project(':spotify-app-remote')
+    implementation "com.google.code.gson:gson:2.6.1"
 }
 repositories {
     mavenCentral()
